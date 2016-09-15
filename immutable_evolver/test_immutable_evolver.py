@@ -72,3 +72,8 @@ def test_not_eq():
 
 def test_disparate_not_eq():
     assert Foo(a=1, b=2) != Bar(a=1, b=2, c=3, d=4)
+
+
+def test_repr():
+    f = Foo(1, 2)
+    assert eval(repr(f)) == f

@@ -40,9 +40,12 @@ class ImmutableEvolver(metaclass=ImmutableEvolverMeta):
         for k, v in kwargs.items():
             setattr(self, k, v)
 
+    @property
+    def _members(self):
+        return ((k.lstrip('_'), getattr(self, k)) for k in self._all_slots)
+
     def _evolve(self, **kwargs):
-        members = ((k.lstrip('_'), getattr(self, k)) for k in self._all_slots)
-        return type(self)(**dict(members, **kwargs))
+        return type(self)(**dict(self._members, **kwargs))
 
     def __eq__(self, other):
         try:
@@ -50,3 +53,8 @@ class ImmutableEvolver(metaclass=ImmutableEvolverMeta):
                 getattr(self, k) == getattr(other, k) for k in self._all_slots)
         except AttributeError:
             return NotImplemented
+
+    def __repr__(self):
+        return '{}({})'.format(
+            type(self).__name__,
+            ', '.join('{}={}'.format(k, v) for k, v in self._members))
