@@ -43,3 +43,10 @@ class ImmutableEvolver(metaclass=ImmutableEvolverMeta):
     def _evolve(self, **kwargs):
         members = ((k.lstrip('_'), getattr(self, k)) for k in self._all_slots)
         return type(self)(**dict(members, **kwargs))
+
+    def __eq__(self, other):
+        try:
+            return self._all_slots == other._all_slots and all(
+                getattr(self, k) == getattr(other, k) for k in self._all_slots)
+        except AttributeError:
+            return NotImplemented

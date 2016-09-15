@@ -60,3 +60,15 @@ def test_args_kwargs():
 def test_assertion():
     raises(AssertionError, Bar)
     raises(AssertionError, Bar, 1, c=2)
+
+
+def test_eq():
+    assert Foo(1, 2) == Foo(1, 2)
+
+
+def test_not_eq():
+    assert Foo(1, 2) != Foo(3, 4)
+
+
+def test_disparate_not_eq():
+    assert Foo(a=1, b=2) != Bar(a=1, b=2, c=3, d=4)
