@@ -30,6 +30,7 @@ class ImmutableEvolver(metaclass=ImmutableEvolverMeta):
     __slots__ = ()
     _defaults = ()
     _all_defaults = pmap()
+    _eq_excl = ()
 
     def __init__(self, *args, **kwargs):
         named_args = dict(zip(self._all_slots, args))
@@ -50,7 +51,8 @@ class ImmutableEvolver(metaclass=ImmutableEvolverMeta):
     def __eq__(self, other):
         try:
             return self._all_slots == other._all_slots and all(
-                getattr(self, k) == getattr(other, k) for k in self._all_slots)
+                getattr(self, k) == getattr(other, k) for k in
+                self._all_slots if k not in self._eq_excl)
         except AttributeError:
             return NotImplemented
 

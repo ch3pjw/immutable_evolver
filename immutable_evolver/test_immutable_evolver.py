@@ -13,6 +13,7 @@ class Foo(ImmutableEvolver):
 class Bar(Foo):
     __slots__ = '_c', '_d'
     _defaults = 4,
+    _eq_excl = '_d',
 
 
 def test_slots_accumulate():
@@ -72,6 +73,11 @@ def test_not_eq():
 
 def test_disparate_not_eq():
     assert Foo(a=1, b=2) != Bar(a=1, b=2, c=3, d=4)
+
+
+def test_eq_excl():
+    b = Bar(a=1, b=2, c=3, d=4)
+    assert b == b._evolve(d=5)
 
 
 def test_repr():
